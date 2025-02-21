@@ -22,3 +22,4 @@ endmacro(add_app)
 
 add_app(webget)
 add_app(tcp_native)
+add_app(ip_raw)
