@@ -1,6 +1,24 @@
 #pragma once
 
 #include "byte_stream.hh"
+#include <cstdint>
+#include <map>
+#include <set>
+#include <vector>
+
+struct reassembler_item
+{
+  std::string data;
+  uint64_t first_index;
+  uint64_t last_index; // 左闭右开
+  bool is_last;
+
+  bool operator<( const reassembler_item& x ) const { return first_index < x.first_index; }
+
+  reassembler_item( std::string data1, uint64_t first_index1, uint64_t last_index1, bool is_last1 )
+    : data( std::move( data1 ) ), first_index( first_index1 ), last_index( last_index1 ), is_last( is_last1 )
+  {}
+};
 
 class Reassembler
 {
@@ -42,5 +60,8 @@ public:
   const Writer& writer() const { return output_.writer(); }
 
 private:
+  uint64_t current_index_ {};
+  uint64_t pending_size_ {};
+  std::vector<reassembler_item> buffer_ {};
   ByteStream output_;
 };
