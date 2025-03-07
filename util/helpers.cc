@@ -23,7 +23,7 @@ string pretty_print( string_view str, size_t max_length )
   string ret = ss.str();
   if ( truncated ) {
     if ( ret.size() >= 3 ) {
-      ret.substr( ret.size() - 3, 3 ) = "...";
+      ret.replace( ret.size() - 3, 3, "..." );
     } else {
       ret += "...";
     }

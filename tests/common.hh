@@ -3,6 +3,7 @@
 #include "conversions.hh"
 #include "debug.hh"
 #include "exception.hh"
+#include "tcp_sender_message.hh"
 
 #include <iostream>
 #include <optional>
@@ -18,7 +19,7 @@ public:
   explicit ExpectationViolation( const std::string& msg ) : std::runtime_error( msg ) {}
 
   template<typename T>
-  inline ExpectationViolation( const std::string& property_name, const T& expected, const T& actual )
+  ExpectationViolation( const std::string& property_name, const T& expected, const T& actual )
     : ExpectationViolation { "should have had " + property_name + " = " + to_string( expected )
                              + ", but instead it was " + to_string( actual ) }
   {}
@@ -74,11 +75,21 @@ class Timeout
   public:
     Timer();
     ~Timer();
+
+    Timer( const Timer& other ) = delete;
+    Timer( Timer&& other ) = delete;
+    Timer& operator=( const Timer& other ) = delete;
+    Timer& operator=( Timer&& other ) = delete;
   };
 
 public:
   Timeout();
   ~Timeout();
+
+  Timeout( const Timeout& other ) = delete;
+  Timeout( Timeout&& other ) = delete;
+  Timeout& operator=( const Timeout& other ) = delete;
+  Timeout& operator=( Timeout&& other ) = delete;
 
   Timer make_timer();
 };
@@ -123,6 +134,9 @@ class TestHarness
 
   void finish_step( const std::string& str, int color )
   {
+    if ( not steps_executed_ ) {
+      throw std::runtime_error( "TestHarness in invalid state" );
+    }
     steps_executed_.value().emplace_back( str, color, std::move( debug_output_ ) );
     debug_output_.clear();
   }
@@ -235,3 +249,5 @@ struct ExpectBool : public ExpectNumber<T, bool>
 {
   using ExpectNumber<T, bool>::ExpectNumber;
 };
+
+std::string to_string( const TCPSenderMessage& msg );
