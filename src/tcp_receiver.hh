@@ -24,7 +24,14 @@ public:
   Reader& reader() { return reassembler_.reader(); }
   const Reader& reader() const { return reassembler_.reader(); }
   const Writer& writer() const { return reassembler_.writer(); }
+  size_t window_size() const;
+  std::optional<Wrap32> ackno() const;
 
 private:
   Reassembler reassembler_;
+  bool synsent_ = false;
+  bool finsent_ = false;
+  bool has_error = false;
+
+  Wrap32 zero_pointer = Wrap32( 0 );
 };
