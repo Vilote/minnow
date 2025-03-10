@@ -34,6 +34,9 @@ int main()
     // Nearly big unwrap with non-zero ISN
     test_should_be( Wrap32( UINT32_MAX ).unwrap( Wrap32( 1UL << 31 ), 0 ),
                     static_cast<uint64_t>( UINT32_MAX ) >> 1 );
+    // Big unwrap with non-zero ISN and low non-zero checkpoint
+    // test credit: Thanawan Atchariyachanvanit
+    test_should_be( Wrap32( 0 ).unwrap( Wrap32( 1 ), 1 ), static_cast<uint64_t>( UINT32_MAX ) );
   } catch ( const exception& e ) {
     cerr << e.what() << "\n";
     return 1;

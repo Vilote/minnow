@@ -77,7 +77,7 @@ double speed_test( fstream& debug_output,
        << " reached " << fixed << setprecision( 2 ) << gigabits_per_second << " Gbit/s.\n";
 
   auto read_s = to_string( read_size );
-  string fill( 5 - read_s.size(), ' ' );
+  const string fill( 5 - read_s.size(), ' ' );
   debug_output << "        ByteStream throughput (pop length " << read_s << "):" << fill << fixed
                << setprecision( 2 ) << setw( 5 ) << gigabits_per_second << " Gbit/s\n";
 

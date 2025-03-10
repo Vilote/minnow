@@ -10,8 +10,10 @@ void default_debug_handler( void* /*unused*/, std::string_view message )
 }
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-non-const-global-variables)
-static void ( *debug_handler )( void*, std::string_view ) = default_debug_handler;
-static void* debug_arg = nullptr;
+namespace {
+void ( *debug_handler )( void*, std::string_view ) = default_debug_handler;
+void* debug_arg = nullptr;
+} // namespace
 // NOLINTEND(cppcoreguidelines-avoid-non-const-global-variables)
 
 void debug_str( string_view message )

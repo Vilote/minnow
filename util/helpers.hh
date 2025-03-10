@@ -1,9 +1,9 @@
 #pragma once
 
+#include "ipv4_datagram.hh"
 #include "parser.hh"
 #include "ref.hh"
 
-#include <numeric>
 #include <ranges>
 #include <string>
 #include <vector>
@@ -46,3 +46,9 @@ std::string concat( std::ranges::range auto&& r )
 
 // Pretty-print a string (escaping unprintable characters, and with a maximum length)
 std::string pretty_print( std::string_view str, size_t max_length = 32 );
+
+inline InternetDatagram clone( const InternetDatagram& x )
+{
+  auto duplicate_payload = x.payload | std::views::transform( []( auto& i ) { return i.get(); } );
+  return { x.header, { duplicate_payload.begin(), duplicate_payload.end() } };
+}
