@@ -1,9 +1,9 @@
 #pragma once
-
 #include "byte_stream.hh"
+#include "tcp_config.hh"
 #include "tcp_receiver_message.hh"
 #include "tcp_sender_message.hh"
-
+#include <cstdint>
 #include <functional>
 
 class TCPSender
@@ -38,8 +38,18 @@ public:
 
 private:
   Reader& reader() { return input_.reader(); }
-
   ByteStream input_;
   Wrap32 isn_;
   uint64_t initial_RTO_ms_;
+  uint64_t current_seq_ {};
+  uint64_t in_flight_cnt_ {};
+  uint64_t retrans_cnt_ {};
+  uint64_t window_size_ { 1 };
+  uint64_t ack_ {};
+  uint64_t expire_time_ { UINT64_MAX };
+  bool is_fin_sent {};
+  bool is_error {};
+  uint64_t current_time_ {};
+  uint64_t rto_ {};
+  std::deque<TCPSenderMessage> outstanding_msg_ {};
 };
